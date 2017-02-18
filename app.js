@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,6 +11,8 @@ var Strategy = require('passport-twitter').Strategy;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var login = require('./routes/login');
+var profile = require('./routes/profile');
 
 
 // Configure the Twitter strategy for use by Passport.
@@ -67,8 +70,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Use application-level middleware for common functionality, including
+// logging, parsing, and session handling.
+app.use(require('morgan')('combined'));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.use('/', index);
 app.use('/users', users);
+app.use('/login', login);
+app.use('/profile', profile);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
