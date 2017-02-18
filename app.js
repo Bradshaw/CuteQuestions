@@ -10,7 +10,6 @@ var passport = require('passport')
 var Strategy = require('passport-twitter').Strategy;
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 var login = require('./routes/login');
 var profile = require('./routes/profile');
 
@@ -81,7 +80,6 @@ app.use(passport.session());
 
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/login', login);
 app.use('/profile', profile);
 
